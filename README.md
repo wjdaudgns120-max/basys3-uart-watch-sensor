@@ -8,6 +8,23 @@ Verilog로 구현한 Basys3 FPGA 기반 **시계 / 스톱워치 / 온습도(DHT1
 
 ![System Overview](docs/system_overview.png)
 
+### System Flow
+
+위 그림의 왼쪽(입력)에서 오른쪽(출력)으로 데이터가 이렇게 흐릅니다.
+
+1. **입력 (버튼 · 스위치 · UART RX)**
+   버튼 4개는 디바운서를 거치고, 스위치 `sw[15:0]`는 모드를 고릅니다. PC에서 보낸 문자는 `uart_rx`가 16배 오버샘플링으로 받아 RX FIFO에 쌓습니다.
+2. **명령 해석 (`uart_ascii_decoder`)**
+   FIFO에서 꺼낸 ASCII를 제어 펄스로 바꿉니다. `r`, `s`, `c` 같은 한 글자 명령은 바로 실행하고, `/dht`, `/sr`, `/get`은 FSM으로 한 글자씩 확인합니다.
+3. **모드 제어 (`control_unit`)**
+   버튼과 UART 명령을 하나의 FSM에서 합쳐 처리해서, 어느 쪽으로 입력해도 같은 동작을 합니다. 결과로 시계·스톱워치 제어 신호와 센서 측정 시작 신호를 냅니다.
+4. **기능 블록 (시계 · 스톱워치 · DHT11 · HC-SR04)**
+   `watch_datapath`, `stopwatch_datapath`가 시간을 세고, `dht11`·`sr04_controller` FSM이 센서와 통신해 온습도와 거리를 구합니다.
+5. **출력 선택 (`data_selector`)**
+   스위치 모드에 따라 표시할 값을 고르고 **레지스터에 한 번 저장**합니다(타이밍 위반 해결 포인트).
+6. **출력 (FND · UART TX)**
+   선택된 값은 4자리 FND에 표시됩니다. `/get` 명령을 받으면 `uart_sender`가 값을 자릿수별 ASCII로 바꿔 TX FIFO에 넣고, `uart_tx`가 PC로 전송합니다.
+
 ## 주요 기능
 
 | 기능 | 설명 |
