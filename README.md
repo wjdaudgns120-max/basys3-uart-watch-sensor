@@ -1,6 +1,6 @@
 # FPGA UART Watch & Sensor System
 
-Verilog로 구현한 FPGA 기반 **시계 / 스톱워치 / 온습도(DHT11) / 초음파 거리(HC-SR04)** 통합 시스템입니다.
+Verilog로 구현한 Basys3 FPGA 기반 **시계 / 스톱워치 / 온습도(DHT11) / 초음파 거리(HC-SR04)** 통합 시스템입니다.
 보드의 버튼·스위치뿐 아니라 PC의 **UART 명령으로도 모든 기능을 제어**할 수 있고, 현재 표시값을 UART로 PC에 전송합니다.
 결과는 4자리 7-Segment(FND)에 표시됩니다.
 
@@ -109,4 +109,4 @@ Verilog로 구현한 FPGA 기반 **시계 / 스톱워치 / 온습도(DHT11) / �
 ## 개발 환경
 
 - Verilog HDL, Xilinx Vivado
-- 100 MHz 시스템 클럭, 4자리 FND, 버튼 4개, 슬라이드 스위치 16개 구성 FPGA 보드
+- Digilent Basys3 (Xilinx Artix-7), 100 MHz 시스템 클럭
