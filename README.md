@@ -4,6 +4,10 @@ Verilog로 구현한 Basys3 FPGA 기반 **시계 / 스톱워치 / 온습도(DHT1
 보드의 버튼·스위치뿐 아니라 PC의 **UART 명령으로도 모든 기능을 제어**할 수 있고, 현재 표시값을 UART로 PC에 전송합니다.
 결과는 4자리 7-Segment(FND)에 표시됩니다.
 
+## System Overview
+
+![System Overview](docs/system_overview.png)
+
 ## 주요 기능
 
 | 기능 | 설명 |
@@ -42,25 +46,6 @@ Verilog로 구현한 Basys3 FPGA 기반 **시계 / 스톱워치 / 온습도(DHT1
 한 글자 명령은 바로 실행되고, `/`로 시작하는 문자열 명령은 FSM으로 한 글자씩 받아서 확인합니다.
 
 ## 시스템 구조
-
-```
-            ┌────────────┐   ┌───────────────────┐
- rx ───────▶│ UART RX    │──▶│ RX FIFO           │──▶ uart_ascii_decoder ─┐
-            └────────────┘   └───────────────────┘                        │
- btn L/R/U/D ──▶ btn_debouncer ───────────────────────────────────────────┤
- sw[15:0] ────────────────────────────────────────────────────────────────┤
-                                                                          ▼
-                                                                    control_unit (FSM)
-                                    ┌─────────────────┬──────────────┬────┴─────────┐
-                                    ▼                 ▼              ▼              ▼
-                              watch_datapath  stopwatch_datapath   dht11    sr04_controller
-                                    └─────────────────┴──────┬───────┴──────────────┘
-                                                             ▼
-                                                      data_selector
-                                                   ┌─────────┴──────────┐
-                                                   ▼                    ▼
-                                            fnd_controller        uart_sender ── TX FIFO ── UART TX ──▶ tx
-```
 
 | 모듈 | 역할 |
 |---|---|
