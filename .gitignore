@@ -1,0 +1,17 @@
+# Vivado
+*.cache/
+*.hw/
+*.ip_user_files/
+*.runs/
+*.sim/
+*.gen/
+.Xil/
+*.jou
+*.log
+*.str
+*.bit
+*.wdb
+# Media / archives
+*.mp4
+*.zip
+*.swp
